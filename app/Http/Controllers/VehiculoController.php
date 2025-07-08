@@ -64,10 +64,9 @@ class VehiculoController extends Controller
             return view('vehiculos.modificar', compact('vehiculo'));
         }
 
-        // Validar los datos del vehículo utilizando el método privado
-        $datos = $this->validarVehiculo($req);
 
-        // Actualizar el vehículo con los datos validados
+        // Validar los datos del vehículo utilizando el método privado, pasando el ID para la regla unique
+        $datos = $this->validarVehiculo($req, $vehiculo->id);
         $vehiculo->update($datos);
 
         // Redirigir al índice de vehículos con un mensaje de éxito
@@ -103,13 +102,20 @@ class VehiculoController extends Controller
      * @param Request $req La solicitud HTTP.
      * @return array Los datos validados.
      */
-    private function validarVehiculo(Request $req)
+    private function validarVehiculo(Request $req, $vehiculoId = null)
     {
-        // Validación de los campos del vehículo con reglas específicas
+        // Construir la regla de patente considerando si es edición
+        $patenteRule = ['required', 'string', 'min:6', 'max:7', 'regex:' . Helper::REGEX_PATENTE];
+        if ($vehiculoId) {
+            $patenteRule[] = 'unique:vehiculos,patente,' . $vehiculoId;
+        } else {
+            $patenteRule[] = 'unique:vehiculos,patente';
+        }
+
         return $req->validate([
             'marca' => 'required|string|max:50|regex:' . Helper::REGEX_TEXTO,
             'modelo' => 'required|string|max:50',
-            'patente' => ['required', 'string', 'min:6', 'max:7', 'unique:vehiculos,patente', 'regex:' . Helper::REGEX_PATENTE],
+            'patente' => $patenteRule,
             'anio' => 'required|integer|min:1900|max:' . date('Y'),
             'tipo' => 'required|in:Auto,Moto',
         ], [

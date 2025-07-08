@@ -62,7 +62,7 @@
                 </form>
             </div>
             <div class="logo-derecha d-flex w-50 h-100">
-                <img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg"
+                <img src="https://wallpapers.com/images/hd/car-repair-2560-x-1589-wallpaper-vuryoc2c99rlauhk.jpg"
                     alt="" class="w-100 rounded">
             </div>
         </div>
